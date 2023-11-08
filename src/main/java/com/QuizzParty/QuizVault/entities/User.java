@@ -1,10 +1,13 @@
 package com.QuizzParty.QuizVault.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_user")
@@ -17,6 +20,9 @@ public class User implements Serializable {
     private Long id;
     private String name;
     private String email;
+    @OneToMany(mappedBy = "owner")
+    @JsonIgnore
+    private final Set<Quiz> quizzes = new HashSet<>();
 
     public User() {
     }
@@ -71,5 +77,9 @@ public class User implements Serializable {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    public Set<Quiz> getQuizzes() {
+        return quizzes;
     }
 }
