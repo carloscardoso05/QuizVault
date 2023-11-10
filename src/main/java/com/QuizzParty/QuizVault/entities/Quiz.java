@@ -20,7 +20,7 @@ public class Quiz implements Serializable {
     private String title;
     private String description;
     @ManyToOne
-    @JoinColumn(name = "quiz_id")
+    @JoinColumn(name = "owner_id")
     private User owner;
     @OneToMany(mappedBy = "quiz")
     private final Set<QuizQuestion> quizQuestions = new HashSet<>();

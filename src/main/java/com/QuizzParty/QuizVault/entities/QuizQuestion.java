@@ -6,9 +6,9 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_quiz_question")
@@ -20,9 +20,8 @@ public class QuizQuestion implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String question;
-    @ElementCollection
-    private final List<String> wrongAnswers = new ArrayList<>();
-    private String correctAnswer;
+    @OneToMany(mappedBy = "quizQuestion")
+    private final Set<Answer> answers = new HashSet<>();
     private Difficulty difficulty;
     @ManyToOne
     @JoinColumn(name = "quiz_id")
@@ -32,10 +31,9 @@ public class QuizQuestion implements Serializable {
     public QuizQuestion() {
     }
 
-    public QuizQuestion(Long id, String question, String correctAnswer, Difficulty difficulty, Quiz quiz) {
+    public QuizQuestion(Long id, String question, Difficulty difficulty, Quiz quiz) {
         this.id = id;
         this.question = question;
-        this.correctAnswer = correctAnswer;
         this.difficulty = difficulty;
         this.quiz = quiz;
     }
@@ -56,18 +54,6 @@ public class QuizQuestion implements Serializable {
         this.question = question;
     }
 
-    public List<String> getWrongAnswers() {
-        return wrongAnswers;
-    }
-
-    public String getCorrectAnswer() {
-        return correctAnswer;
-    }
-
-    public void setCorrectAnswer(String correctAnswer) {
-        this.correctAnswer = correctAnswer;
-    }
-
     public Difficulty getDifficulty() {
         return difficulty;
     }
@@ -81,6 +67,9 @@ public class QuizQuestion implements Serializable {
 
     public void setQuiz(Quiz quiz) {
         this.quiz = quiz;
+    }
+    public Set<Answer> getAnswers() {
+        return answers;
     }
 
     @Override
@@ -101,10 +90,10 @@ public class QuizQuestion implements Serializable {
         return "QuizQuestion{" +
                 "id=" + id +
                 ", question='" + question + '\'' +
-                ", wrongAnswers=" + wrongAnswers +
-                ", correctAnswer='" + correctAnswer + '\'' +
+                ", answers=" + answers +
                 ", difficulty=" + difficulty +
                 ", quiz=" + quiz +
                 '}';
     }
+
 }
